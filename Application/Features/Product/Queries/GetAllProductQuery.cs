@@ -8,11 +8,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Features.Product.Commands
+namespace Application.Features.Product.Queries
 {
-    public class GetAllProductCommand : IRequest<IEnumerable<tbl_Product>>
+    public class GetAllProductQuery : IRequest<IEnumerable<tbl_Product>>
     {
-        internal class GetAllProductCommandHandler : IRequestHandler<GetAllProductCommand, IEnumerable<tbl_Product>>
+        internal class GetAllProductCommandHandler : IRequestHandler<GetAllProductQuery, IEnumerable<tbl_Product>>
         {
             private readonly IApplicationDbContext _context;
 
@@ -21,12 +21,12 @@ namespace Application.Features.Product.Commands
                 _context = context;
             }
 
-            public async Task<IEnumerable<tbl_Product>> Handle(GetAllProductCommand request, CancellationToken cancellationToken)
+            public async Task<IEnumerable<tbl_Product>> Handle(GetAllProductQuery request, CancellationToken cancellationToken)
             {
                 var product = await _context.tbl_Products.ToListAsync();
 
                 return product;
-               
+
             }
         }
     }
