@@ -1,4 +1,6 @@
-﻿using Application.Interfaces;
+﻿using Application.Exceptions;
+using Application.Interfaces;
+using Application.Wrapper;
 using Domain.ProductModel;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -10,11 +12,11 @@ using System.Threading.Tasks;
 
 namespace Application.Features.Product.Queries
 {
-    public class GetProductByIdQuery : IRequest<tbl_Product>
+    public class GetProductByIdQuery : IRequest<ApiResponse<tbl_Product>>
     {
         public int Id { get; set; }
 
-        internal class GetProductByIdQueryHandler : IRequestHandler<GetProductByIdQuery, tbl_Product>
+        internal class GetProductByIdQueryHandler : IRequestHandler<GetProductByIdQuery, ApiResponse<tbl_Product>>
         {
             private readonly IApplicationDbContext _context;
 
@@ -23,15 +25,15 @@ namespace Application.Features.Product.Queries
                 _context = context;
             }
 
-            public async Task<tbl_Product> Handle(GetProductByIdQuery request, CancellationToken cancellationToken)
+            public async Task<ApiResponse<tbl_Product>> Handle(GetProductByIdQuery request, CancellationToken cancellationToken)
             {
                 var productExists = await _context.tbl_Products.Where(p => p.ID == request.Id).FirstOrDefaultAsync();
 
                 if (productExists == null)
                 {
-                    return default;
+                    throw new ApiException("Product Not Found");
                 }
-                return productExists;
+                return new ApiResponse<tbl_Product>{Data = productExists, Message = "Successfully Fetched."};
             }
         }
     }
