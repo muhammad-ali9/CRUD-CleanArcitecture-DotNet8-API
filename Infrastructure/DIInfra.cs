@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Domain.Repository;
+using Infrastructure.Repo;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +13,7 @@ namespace Infrastructure
     {
         public static void AddInfrastructure(this IServiceCollection services)
         {
+            services.AddTransient<IProduct, ProductRepo>();
 
         }
     }

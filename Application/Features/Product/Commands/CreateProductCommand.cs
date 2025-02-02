@@ -1,6 +1,7 @@
 ﻿using Application.Interfaces;
 using AutoMapper;
 using Domain.ProductModel;
+using Domain.Repository;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -17,27 +18,26 @@ namespace Application.Features.Product.Commands
         public decimal Rate { get; set; }
         internal class CreateProductCommandHanlder : IRequestHandler<CreateProductCommand, int>
         {
-            private readonly IApplicationDbContext _context;
+            private readonly IProduct _product;
             private readonly IMapper _mapper;
 
-            public CreateProductCommandHanlder(IApplicationDbContext context, IMapper mapper)
+            public CreateProductCommandHanlder(IMapper mapper, IProduct product)
             {
-                _context = context;
                 _mapper = mapper;
+                _product = product;
             }
 
             public async Task<int> Handle(CreateProductCommand request, CancellationToken cancellationToken)
             {
-                var product =  _mapper.Map<tbl_Product>(request);
+                var prod =  _mapper.Map<tbl_Product>(request);
                 //var product = new tbl_Product();
                 //product.Name = request.Name;
                 //product.Description = request.Description;
                 //product.Rate = request.Rate;
 
-                await _context.tbl_Products.AddAsync(product);
-                await _context.SaveChangesAsync();
+              var saveRecord =   await _product.CreateProduct(prod);
 
-                return product.ID;
+                return saveRecord;
             }
         }
     }

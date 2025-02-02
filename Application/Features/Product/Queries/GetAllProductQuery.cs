@@ -1,5 +1,8 @@
-﻿using Application.Interfaces;
+﻿using Application.Exceptions;
+using Application.Interfaces;
+using Application.Wrapper;
 using Domain.ProductModel;
+using Domain.Repository;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -10,22 +13,25 @@ using System.Threading.Tasks;
 
 namespace Application.Features.Product.Queries
 {
-    public class GetAllProductQuery : IRequest<IEnumerable<tbl_Product>>
+    public class GetAllProductQuery : IRequest<ApiResponse<IEnumerable<tbl_Product>>>
     {
-        internal class GetAllProductCommandHandler : IRequestHandler<GetAllProductQuery, IEnumerable<tbl_Product>>
+        internal class GetAllProductCommandHandler : IRequestHandler<GetAllProductQuery, ApiResponse<IEnumerable<tbl_Product>>>
         {
-            private readonly IApplicationDbContext _context;
+          private readonly IProduct _context;
 
-            public GetAllProductCommandHandler(IApplicationDbContext context)
+            public GetAllProductCommandHandler(IProduct context)
             {
                 _context = context;
             }
 
-            public async Task<IEnumerable<tbl_Product>> Handle(GetAllProductQuery request, CancellationToken cancellationToken)
+            public async Task<ApiResponse<IEnumerable<tbl_Product>>> Handle(GetAllProductQuery request, CancellationToken cancellationToken)
             {
-                var product = await _context.tbl_Products.ToListAsync();
-
-                return product;
+                var product = await _context.GetAllProducts();
+                if(product == null)
+                {
+                    throw new ApiException("Product Not Available.");
+                }
+                return new ApiResponse<IEnumerable<tbl_Product>>(product, "Product Fetch Succesfully");
 
             }
         }

@@ -1,6 +1,7 @@
 ﻿using Application.Exceptions;
 using Application.Interfaces;
 using Application.Wrapper;
+using Domain.Repository;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -17,25 +18,22 @@ namespace Application.Features.Product.Commands
 
         internal class DeleteProductCommandHandler : IRequestHandler<DeleteProductCommand, ApiResponse<string>>
         {
-            private readonly IApplicationDbContext _context;
+            private readonly IProduct _context;
 
-            public DeleteProductCommandHandler(IApplicationDbContext context)
+            public DeleteProductCommandHandler(IProduct context)
             {
                 _context = context;
             }
 
             public async Task<ApiResponse<string>> Handle(DeleteProductCommand request, CancellationToken cancellationToken)
             {
-                var productExists = await _context.tbl_Products.Where(p => p.ID == request.Id).FirstOrDefaultAsync();
+                var productExists = await _context.DeleteProduct(request.Id);
                 
                 if (productExists == null)
                 {
                     throw new ApiException("Product Does not Exist.");
                 }
-
-                _context.tbl_Products.Remove(productExists);
-                await _context.SaveChangesAsync();
-                return new ApiResponse<string>(productExists.ID.ToString(), "Product Deleted Successfully.");
+                return new ApiResponse<string>(productExists, "Product Deleted Successfully.");
                 
 
 

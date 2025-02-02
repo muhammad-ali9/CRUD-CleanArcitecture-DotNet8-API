@@ -14,6 +14,7 @@ namespace Application.Mapping
         public MappingProfile()
         {
             CreateMap<CreateProductCommand, tbl_Product> ();
+            CreateMap<UpdateProductCommand, tbl_Product>();
         }
     }
 }

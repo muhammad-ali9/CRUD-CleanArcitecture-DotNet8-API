@@ -2,6 +2,7 @@
 using Application.Interfaces;
 using Application.Wrapper;
 using Domain.ProductModel;
+using Domain.Repository;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -19,15 +20,16 @@ namespace Application.Features.Product.Queries
         internal class GetProductByIdQueryHandler : IRequestHandler<GetProductByIdQuery, ApiResponse<tbl_Product>>
         {
             private readonly IApplicationDbContext _context;
-
-            public GetProductByIdQueryHandler(IApplicationDbContext context)
+            private readonly IProduct _product;
+            public GetProductByIdQueryHandler(IApplicationDbContext context, IProduct product)
             {
                 _context = context;
+                _product = product;
             }
 
             public async Task<ApiResponse<tbl_Product>> Handle(GetProductByIdQuery request, CancellationToken cancellationToken)
             {
-                var productExists = await _context.tbl_Products.Where(p => p.ID == request.Id).FirstOrDefaultAsync();
+                var productExists = await _product.GetProductByIdInterface(request.Id);
 
                 if (productExists == null)
                 {
