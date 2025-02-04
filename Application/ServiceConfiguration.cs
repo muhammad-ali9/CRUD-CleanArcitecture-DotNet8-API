@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Application
 {
-    public static class DIApplication
+    public static class ServiceConfiguration
     {
         public static void AddApplication(this IServiceCollection services)
         {

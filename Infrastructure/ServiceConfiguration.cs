@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure
 {
-    public static class DIInfra
+    public static class ServiceConfiguration
     {
         public static void AddInfrastructure(this IServiceCollection services)
         {

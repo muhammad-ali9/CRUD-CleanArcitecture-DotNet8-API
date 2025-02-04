@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Persistence
 {
-    public static class DIPersistence
+    public static class ServiceConfiguration
     {
         public static void AddPersistence(this IServiceCollection services, IConfiguration configuration)
         {
