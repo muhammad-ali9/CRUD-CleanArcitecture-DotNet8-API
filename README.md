@@ -8,4 +8,6 @@ It includes complete CRUD operations and follows best practices for scalable and
 - **CQRS Pattern** using MediatR for Commands and Queries.
 - **Entity Framework Core** for database operations.
 - **FluentValidation** for input validation.
+- **Data Seeding** is used for initial data storage.
+- **Identity Framework** for user registration, roles etc.
 - **Swagger** for API documentation.
