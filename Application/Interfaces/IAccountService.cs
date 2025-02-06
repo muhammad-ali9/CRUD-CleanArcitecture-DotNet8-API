@@ -10,6 +10,7 @@ namespace Application.Interfaces
 {
     public interface IAccountService
     {
+        Task<ApiResponse<AuthenticationResponse>> UserLogin(LoginModel loginModel);
         Task<ApiResponse<Guid>> Registration(RegistrationModel registrationModel);
     }
 }

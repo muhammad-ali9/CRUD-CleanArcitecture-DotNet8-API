@@ -15,6 +15,13 @@ namespace UI.Controllers
         {
             _accountService = accountService;
         }
+        [HttpPost("Login")]
+
+        public async Task<IActionResult> UserLogin(LoginModel loginModel)
+        {
+            var result = await _accountService.UserLogin(loginModel);
+            return Ok(result);
+        }
 
         [HttpPost("UserRegistration")]
         public async Task<IActionResult> Registration(RegistrationModel registrationModel)
