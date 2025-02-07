@@ -11,7 +11,7 @@ namespace UI.ServiceExtension
             {
                 c.SwaggerDoc("v1", new OpenApiInfo
                 {
-                    Title = "JWTToken_Auth_API",
+                    Title = "CRUD - Clean Architecture - Dot Net 8",
                     Version = "v1"
                 });
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()

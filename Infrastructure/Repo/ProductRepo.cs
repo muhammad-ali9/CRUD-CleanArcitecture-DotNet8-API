@@ -14,14 +14,17 @@ namespace Infrastructure.Repo
     public class ProductRepo : IProduct
     {
         private readonly IApplicationDbContext _context;
+        private readonly IAuthenticatedUser _userLogin;
 
-        public ProductRepo(IApplicationDbContext context)
+        public ProductRepo(IApplicationDbContext context, IAuthenticatedUser userLogin)
         {
             _context = context;
+            _userLogin = userLogin;
         }
 
         public async Task<int> CreateProduct(tbl_Product product)
         {
+            product.CreatedBy = _userLogin.UserLogin;
             await _context.tbl_Products.AddAsync(product);
             await _context.SaveChangesAsync();
             return product.ID;
@@ -56,6 +59,8 @@ namespace Infrastructure.Repo
             var productExist = await _context.tbl_Products.Where(p => p.ID == product.ID).FirstOrDefaultAsync();
             if (productExist != null)
             {
+                productExist.ModifiedBy = _userLogin.UserLogin;
+                productExist.ModifiedOn = DateTime.Now;
                 productExist.Name = product.Name;
                 productExist.Description = product.Description;
                 productExist.Rate = product.Rate;
